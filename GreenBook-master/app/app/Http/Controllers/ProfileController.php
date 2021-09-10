@@ -92,8 +92,10 @@ class ProfileController extends Controller
 
     public function removePost(Request $request)
     {
-
+           
            $post = Post::find($request->id);
+           $arquivo = $post->media;
+           unlink($arquivo);
            $post->delete();
     
            return redirect()->back();
@@ -180,7 +182,8 @@ class ProfileController extends Controller
 
     public function removePhoto()
     {
-        
+        $arquivo = Auth::user()->foto;
+        unlink($arquivo);
         $caminho = "img/semfoto.svg";
         $arr = array(
          "foto" => $caminho,
@@ -267,11 +270,13 @@ class ProfileController extends Controller
 
     public function removePlant(Request $request)
     {
-
+        
            $plant = Plant::find($request->id);
+           $arquivo = $plant->media;
+           unlink($arquivo);
            $plant->delete();
-    
-            return redirect(route('profile'));
+        
+           return redirect(route('profile'));
     }
 
     

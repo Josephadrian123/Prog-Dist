@@ -14,7 +14,7 @@
                         </div>
                     @endif
                     
-                    
+                    @if(!empty($messages))
                     @foreach($messages as $msg)
                     <form method="get" id="formChat{{$msg['id']}}" action="{{ route('chat') }}">
                     
@@ -28,35 +28,43 @@
                     <button class="titulo" style="color: inherit; background-color: inherit; border: none; outline-style: none;"> {{ $msg['name'] }}</button>
                 
                     </div>
-
-                    @if(App\Message::where([
-                ['sender_id', $user->id], ['receiver_id', $msg['id']]
-                ])->orWhere([
-                    ['receiver_id', $user->id], ['sender_id', $msg['id']]
-                    ])->get()->last()['sender_id'] == $user->id)
-                    You:
-                    @elseif(App\Message::where([
-                ['sender_id', $user->id], ['receiver_id', $msg['id']]
-                ])->orWhere([
-                    ['receiver_id', $user->id], ['sender_id', $msg['id']]
-                    ])->get()->last()['sender_id'] == $msg['id'])
-                    {{$msg['name']}}:
-                    @endif
-
                     
+                    @if(App\Message::where([
+                            ['sender_id', $user->id], ['receiver_id', $msg['id']]
+                            ])->orWhere([
+                                ['receiver_id', $user->id], ['sender_id', $msg['id']]
+                                ])->get()->count() > 0)
 
-                     {{ App\Message::where([
-                ['sender_id', $user->id], ['receiver_id', $msg['id']]
-                ])->orWhere([
-                    ['receiver_id', $user->id], ['sender_id', $msg['id']]
-                    ])->get()->last()['text'] }}
+                        @if(App\Message::where([
+                            ['sender_id', $user->id], ['receiver_id', $msg['id']]
+                            ])->orWhere([
+                                ['receiver_id', $user->id], ['sender_id', $msg['id']]
+                                ])->get()->last()['sender_id'] == $user->id)
+                                You:
+                                @elseif(App\Message::where([
+                            ['sender_id', $user->id], ['receiver_id', $msg['id']]
+                            ])->orWhere([
+                                ['receiver_id', $user->id], ['sender_id', $msg['id']]
+                                ])->get()->last()['sender_id'] == $msg['id'])
+                                {{$msg['name']}}:
+                                @endif
 
+                                
+
+                                {{ App\Message::where([
+                            ['sender_id', $user->id], ['receiver_id', $msg['id']]
+                            ])->orWhere([
+                                ['receiver_id', $user->id], ['sender_id', $msg['id']]
+                                ])->get()->last()['text'] }}
+                    @endif
                     
                     </div>
                     </a>
     
                     
                     @endforeach
+                    @endif
+                    
                     
                 </div>
             </div>
