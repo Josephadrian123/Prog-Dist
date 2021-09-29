@@ -95,7 +95,9 @@ class ProfileController extends Controller
            
            $post = Post::find($request->id);
            $arquivo = $post->media;
+           if($arquivo != null){
            unlink($arquivo);
+           }
            $post->delete();
     
            return redirect()->back();
@@ -183,7 +185,10 @@ class ProfileController extends Controller
     public function removePhoto()
     {
         $arquivo = Auth::user()->foto;
-        unlink($arquivo);
+        if($arquivo != null){
+            unlink($arquivo);
+        }
+        
         $caminho = "img/semfoto.svg";
         $arr = array(
          "foto" => $caminho,
